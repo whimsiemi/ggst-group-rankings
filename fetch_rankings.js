@@ -1,7 +1,7 @@
 const axios = require("axios");
-const players = require("./datasets/guildford.json");
+const players = require("./datasets/aelings.json");
 
-async function fetch_players(json) {
+async function player_leaderboard(json) {
   let player_arr = [];
   for (let i in json) {
     await axios
@@ -37,4 +37,4 @@ async function fetch_players(json) {
   }
 }
 
-list = fetch_players(players);
+list = player_leaderboard(players);
