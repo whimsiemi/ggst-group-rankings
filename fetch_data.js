@@ -6,7 +6,7 @@ const fs = require("fs");
 
 async function fetch_characters() {
   dir = "./datasets/chars";
-  if (!fs.existsSync("dir")) {
+  if (!fs.existsSync(dir)) {
     fs.mkdirSync(dir);
   }
   let chars_req = await axios.get("https://puddle.farm/api/characters");
