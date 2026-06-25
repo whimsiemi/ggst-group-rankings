@@ -4,6 +4,7 @@ const fs = require("node:fs");
 const path = require("node:path");
 const axios = require("axios");
 const emojis = require(path.join(process.cwd(), "/emojis.json"));
+
 const {
   Client,
   Collection,
@@ -20,6 +21,7 @@ const { token } = require("./config.json");
 
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
+client.cooldowns = new Collection();
 client.commands = new Collection();
 const foldersPath = path.join(__dirname, "commands");
 const commandFolders = fs.readdirSync(foldersPath);
@@ -58,7 +60,36 @@ for (const file of eventFiles) {
 }
 
 client.on(Events.InteractionCreate, async (interaction) => {
+  const { cooldowns } = client;
+
+  // 3. Define the cooldown duration (Default: 3 seconds if not defined in the command file)
+  const defaultCooldownDuration = 10;
+  const cooldownAmount = defaultCooldownDuration * 1000;
   if (interaction.isButton()) {
+    if (!cooldowns.has(interaction.customId)) {
+      cooldowns.set(interaction.customId, new Collection());
+    }
+
+    const now = Date.now();
+    const timestamps = cooldowns.get(interaction.customId);
+
+    if (timestamps.has(interaction.user.id)) {
+      const expirationTime =
+        timestamps.get(interaction.user.id) + cooldownAmount;
+
+      if (now < expirationTime) {
+        const timeLeft = Math.round((expirationTime - now) / 1000);
+
+        return interaction.reply({
+          content: "Whoa! Slow down and wait **${timeLeft}** more second(s) before pressing the button!.",
+          flags: MessageFlags.Ephemeral,
+        });
+      }
+    }
+
+    timestamps.set(interaction.user.id, now);
+
+    setTimeout(() => timestamps.delete(interaction.user.id), cooldownAmount);
     if (interaction.customId == "update") {
       if (
         !interaction.member.permissions.has(
@@ -180,6 +211,31 @@ client.on(Events.InteractionCreate, async (interaction) => {
       );
       return;
     }
+
+    if (!cooldowns.has(interaction.commandName)) {
+      cooldowns.set(interaction.commandName, new Collection());
+    }
+
+    const now = Date.now();
+    const timestamps = cooldowns.get(interaction.commandName);
+
+    if (timestamps.has(interaction.user.id)) {
+      const expirationTime =
+        timestamps.get(interaction.user.id) + cooldownAmount;
+
+      if (now < expirationTime) {
+        const timeLeft = Math.round((expirationTime - now) / 1000);
+
+        return interaction.reply({
+          content: "Whoa! Slow down and wait **${timeLeft}** more second(s) before pressing the button!.",
+          flags: MessageFlags.Ephemeral,
+        });
+      }
+    }
+
+    timestamps.set(interaction.user.id, now);
+
+    setTimeout(() => timestamps.delete(interaction.user.id), cooldownAmount);
 
     try {
       await command.execute(interaction);
