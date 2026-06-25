@@ -130,7 +130,7 @@ module.exports = {
         .setColor(0x0099ff)
         .setTitle(interaction.options.getString("name"))
         .setDescription(ranking_txt)
-        //.setFooter({ text: 'Board index: ' + interaction.options.getInteger("board_index").toString()})
+        .setFooter({ text: 'Board index: ' + interaction.options.getInteger("board_index").toString()})
         .setTimestamp();
 
       const update = new ButtonBuilder()
