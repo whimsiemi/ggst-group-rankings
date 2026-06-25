@@ -9,6 +9,17 @@ module.exports = {
   data: new SlashCommandBuilder()
     .setName("delete_player")
     .setDescription("Removes a player from the server leaderboard")
+    .addIntegerOption((option) =>
+      option
+        .setName("board_index")
+        .setDescription(
+          "The index of the board that you want to edit (maximum of 9)",
+        )
+        .setMinValue(1)
+        .setMaxValue(9)
+        .setRequired(true),
+
+    )
     .addStringOption((option) =>
       option
         .setName("id")
@@ -69,8 +80,15 @@ module.exports = {
         }
       }
       let array = [];
+      let filename = interaction.guild.id;
+      if (interaction.options.getInteger("board_index") > 1) {
+        filename =
+          interaction.guild.id +
+          "_" +
+          interaction.options.getInteger("board_index").toString();
+      }
       array = require(
-        path.join(process.cwd(), "/datasets/" + interaction.guild.id + ".json"),
+        path.join(process.cwd(), "/datasets/" + filename + ".json"),
       );
       for (let i in array) {
         if (array[i].id == interaction.options.getString("id")) {
@@ -88,7 +106,7 @@ module.exports = {
         }
       }
       fs.writeFile(
-        "./datasets/" + interaction.guild.id + ".json",
+        "./datasets/" + filename + ".json",
         JSON.stringify(array, null, "\t"),
         "utf8",
         (err) => {

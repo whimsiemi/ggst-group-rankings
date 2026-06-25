@@ -19,16 +19,26 @@ module.exports = {
     .setDescription(
       "Sends the player leaderboard, which is updated every 24 hours or when requested",
     )
+    .addIntegerOption((option) =>
+      option
+        .setName("board_index")
+        .setDescription("The index of the board that you want to edit (maximum of 9)")
+        .setMinValue(1)
+        .setMaxValue(9)
+        .setRequired(true),
+    )
     .addStringOption((option) =>
       option
         .setName("name")
         .setDescription("The name of your leaderboard")
-        .setMaxLength(256),
+        .setMaxLength(256)
+        .setRequired(true),
     )
     .addChannelOption((option) =>
       option
         .setName("channel")
-        .setDescription("The channel to send the leaderboard to"),
+        .setDescription("The channel to send the leaderboard to")
+        .setRequired(true),
     ),
   async execute(interaction) {
     if (
@@ -48,8 +58,15 @@ module.exports = {
         flags: MessageFlags.Ephemeral,
       });
       let array = [];
+      let filename = interaction.guild.id;
+      if (interaction.options.getInteger("board_index") > 1) {
+        filename =
+          interaction.guild.id +
+          "_" +
+          interaction.options.getInteger("board_index").toString();
+      }
       array = require(
-        path.join(process.cwd(), "/datasets/" + interaction.guild.id + ".json"),
+        path.join(process.cwd(), "/datasets/" + filename + ".json"),
       );
       let ranking_arr = [];
       let ranking_txt = "";
@@ -113,6 +130,7 @@ module.exports = {
         .setColor(0x0099ff)
         .setTitle(interaction.options.getString("name"))
         .setDescription(ranking_txt)
+        //.setFooter({ text: 'Board index: ' + interaction.options.getInteger("board_index").toString()})
         .setTimestamp();
 
       const update = new ButtonBuilder()
@@ -128,7 +146,7 @@ module.exports = {
         require.resolve(
           path.join(
             process.cwd(),
-            "/datasets/" + interaction.guild.id + ".json",
+            "/datasets/" + filename + ".json",
           ),
         )
       ];

@@ -66,8 +66,8 @@ client.on(Events.InteractionCreate, async (interaction) => {
   const defaultCooldownDuration = 10;
   const cooldownAmount = defaultCooldownDuration * 1000;
   if (interaction.isButton()) {
-	const buttonCooldownDuration = 60;
-	const buttonCooldownAmount = buttonCooldownDuration * 1000;
+    const buttonCooldownDuration = 60;
+    const buttonCooldownAmount = buttonCooldownDuration * 1000;
     if (!cooldowns.has(interaction.customId)) {
       cooldowns.set(interaction.customId, new Collection());
     }
@@ -111,12 +111,27 @@ client.on(Events.InteractionCreate, async (interaction) => {
         flags: MessageFlags.Ephemeral,
       });
       try {
-        let array = [];
+        let filename = interaction.guild.id;
+        let index = 1;
+        if (interaction.message.embeds[0].footer != null) {
+          if (
+            interaction.message.embeds[0].footer.text.substr(
+              interaction.message.embeds[0].footer.text.length - 1,
+            ) != "1"
+          ) {
+            filename =
+              interaction.guild.id +
+              "_" +
+              interaction.message.embeds[0].footer.text.substr(
+                interaction.message.embeds[0].footer.text.length - 1,
+              );
+            index = interaction.message.embeds[0].footer.text.substr(
+              interaction.message.embeds[0].footer.text.length - 1,
+            );
+          }
+        }
         array = require(
-          path.join(
-            process.cwd(),
-            "/datasets/" + interaction.guild.id + ".json",
-          ),
+          path.join(process.cwd(), "/datasets/" + filename + ".json"),
         );
         let ranking_arr = [];
         let ranking_txt = "";
@@ -180,6 +195,9 @@ client.on(Events.InteractionCreate, async (interaction) => {
           .setColor(interaction.message.embeds[0].color)
           .setTitle(interaction.message.embeds[0].title)
           .setDescription(ranking_txt)
+          .setFooter({
+            text: "Board index: " + index.toString(),
+          })
           .setTimestamp();
 
         const update = new ButtonBuilder()

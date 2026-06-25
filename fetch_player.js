@@ -3,11 +3,15 @@ const fs = require("fs");
 const path = require("path");
 let player_list = [];
 
-function fetch_player(display_name, id, char, server_id, entry) {
+function fetch_player(index, display_name, id, char, server_id, entry) {
   let array = [];
+  let filename = server_id;
   try {
+    if (index > 1) {
+      filename = server_id + "_" + index.toString();
+    }
     array = require(
-      path.join(process.cwd(), "/datasets/" + server_id + ".json"),
+      path.join(process.cwd(), "/datasets/" + filename + ".json"),
     );
   } catch (_err) {
     console.log("Can't find json! Making new json...");
@@ -16,13 +20,19 @@ function fetch_player(display_name, id, char, server_id, entry) {
   axios.get("https://puddle.farm/api/player/" + id).then((response) => {
     let char_index = 0;
     for (let i in response.data.ratings) {
-      if ((response.data.ratings[i].char_short == char) || (response.data.ratings[i].char_short == entry && char == "")) {
+      if (
+        response.data.ratings[i].char_short == char ||
+        (response.data.ratings[i].char_short == entry && char == "")
+      ) {
         char_index = i;
         break;
       }
     }
     let arr = {
-      name: (display_name != null && display_name != "") ? display_name : response.data.name,
+      name:
+        display_name != null && display_name != ""
+          ? display_name
+          : response.data.name,
       id: id,
       main: response.data.ratings[char_index].char_short,
       char: {
@@ -69,7 +79,7 @@ function fetch_player(display_name, id, char, server_id, entry) {
       }
     }
     fs.writeFile(
-      "./datasets/" + server_id + ".json",
+      "./datasets/" + filename + ".json",
       JSON.stringify(array, null, "\t"),
       "utf8",
       (err) => {

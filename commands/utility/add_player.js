@@ -9,6 +9,17 @@ module.exports = {
   data: new SlashCommandBuilder()
     .setName("add_player")
     .setDescription("Adds a player to the server leaderboard")
+    .addIntegerOption((option) =>
+      option
+        .setName("board_index")
+        .setDescription(
+          "The index of the board that you want to edit (maximum of 9)",
+        )
+        .setMinValue(1)
+        .setMaxValue(9)
+        .setRequired(true),
+
+    )
     .addStringOption((option) =>
       option
         .setName("id")
@@ -66,6 +77,7 @@ module.exports = {
         return;
       }
       await fetch(
+        interaction.options.getInteger("board_index"),
         interaction.options.getString("name"),
         interaction.options.getString("id"),
         interaction.options.getString("character").toUpperCase(),

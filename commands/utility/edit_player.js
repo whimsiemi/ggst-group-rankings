@@ -8,6 +8,17 @@ module.exports = {
   data: new SlashCommandBuilder()
     .setName("edit_player")
     .setDescription("Edit a player's display name or main")
+      .addIntegerOption((option) =>
+      option
+        .setName("board_index")
+        .setDescription(
+          "The index of the board that you want to edit (maximum of 9)",
+        )
+        .setMinValue(1)
+        .setMaxValue(9)
+        .setRequired(true),
+
+    )
     .addStringOption((option) =>
       option
         .setName("id")
