@@ -125,6 +125,7 @@ module.exports = {
         }
       }
       await fetch(
+        interaction.options.getInteger("board_index"),
         name,
         interaction.options.getString("id"),
         char.toUpperCase(),
