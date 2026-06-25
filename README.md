@@ -10,4 +10,5 @@ Using this Discord bot, make a leaderboard featuring a group of players, from fr
     "clientId": "your-clientid-here",
 }
 ```
-3. Run `index.js` to start the bot
+3. Run `fetch_data.js` in a Node terminal to fetch the puddle-farm character data required to make the bot work
+4. Run `index.js` to start the bot
