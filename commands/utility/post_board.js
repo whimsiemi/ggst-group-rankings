@@ -12,7 +12,6 @@ const {
 const path = require("path");
 const axios = require("axios");
 const emojis = require(path.join(process.cwd(), "/emojis.json"));
-const board = require(path.join(process.cwd(), "/strive_board.js"));
 
 module.exports = {
   data: new SlashCommandBuilder()

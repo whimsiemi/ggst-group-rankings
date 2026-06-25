@@ -10,7 +10,6 @@ const {
 const path = require("path");
 const fs = require("fs");
 const axios = require("axios");
-const board = require(path.join(process.cwd(), "/strive_board.js"));
 
 module.exports = {
   data: new SlashCommandBuilder()
