@@ -66,6 +66,8 @@ client.on(Events.InteractionCreate, async (interaction) => {
   const defaultCooldownDuration = 10;
   const cooldownAmount = defaultCooldownDuration * 1000;
   if (interaction.isButton()) {
+	const buttonCooldownDuration = 60;
+	const buttonCooldownAmount = buttonCooldownDuration * 1000;
     if (!cooldowns.has(interaction.customId)) {
       cooldowns.set(interaction.customId, new Collection());
     }
@@ -75,13 +77,13 @@ client.on(Events.InteractionCreate, async (interaction) => {
 
     if (timestamps.has(interaction.user.id)) {
       const expirationTime =
-        timestamps.get(interaction.user.id) + cooldownAmount;
+        timestamps.get(interaction.user.id) + buttonCooldownAmount;
 
       if (now < expirationTime) {
         const timeLeft = Math.round((expirationTime - now) / 1000);
 
         return interaction.reply({
-          content: "Whoa! Slow down and wait **${timeLeft}** more second(s) before pressing the button!.",
+          content: `Whoa! Slow down and wait **${timeLeft}** more second(s) before pressing the button!`,
           flags: MessageFlags.Ephemeral,
         });
       }
@@ -227,7 +229,7 @@ client.on(Events.InteractionCreate, async (interaction) => {
         const timeLeft = Math.round((expirationTime - now) / 1000);
 
         return interaction.reply({
-          content: "Whoa! Slow down and wait **${timeLeft}** more second(s) before pressing the button!.",
+          content: `Whoa! Slow down and wait **${timeLeft}** more second(s) before entering the command!`,
           flags: MessageFlags.Ephemeral,
         });
       }
