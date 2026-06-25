@@ -3,7 +3,6 @@
 const fs = require("node:fs");
 const path = require("node:path");
 const axios = require("axios");
-const board = require(path.join(process.cwd(), "/strive_board.js"));
 const emojis = require(path.join(process.cwd(), "/emojis.json"));
 const {
   Client,
