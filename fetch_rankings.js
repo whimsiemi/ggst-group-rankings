@@ -1,5 +1,6 @@
 const axios = require("axios");
 const players = require("./datasets/aelings.json");
+const fetch = require(path.join(process.cwd(), "/fetch_player.js"));
 
 async function player_leaderboard(json) {
   let player_arr = [];
