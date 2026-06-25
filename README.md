@@ -1,5 +1,5 @@
-# GGST - Silli Leaderboards
-Make a leaderboard featuring a group of players, from friends and local scene members to national pros and even just your collection of alts!
+# GGST - Silli Leaderboard
+Using this Discord bot, make a leaderboard featuring a group of players, from friends and local scene members to national pros and even just your collection of alts!
 
 ## Hosting a fork of this bot
 1. Create a `config.json` file in the root directory
