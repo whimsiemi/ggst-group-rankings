@@ -91,7 +91,7 @@ client.on(Events.InteractionCreate, async (interaction) => {
 
     timestamps.set(interaction.user.id, now);
 
-    setTimeout(() => timestamps.delete(interaction.user.id), cooldownAmount);
+    setTimeout(() => timestamps.delete(interaction.user.id), buttonCooldownAmount);
     if (interaction.customId == "update") {
       if (
         !interaction.member.permissions.has(
