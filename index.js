@@ -107,7 +107,7 @@ client.on(Events.InteractionCreate, async (interaction) => {
       }
       await interaction.reply({
         content:
-          "Updating the leaderboard! Please wait a few seconds. If nothing gets updated, contact the bot developer!",
+          "Updating the leaderboard! This usually takes 0.5 seconds per player (or longer, if the server CPU is under heavy load). If nothing gets updated after 5 minutes, contact the bot developer!",
         flags: MessageFlags.Ephemeral,
       });
       try {
