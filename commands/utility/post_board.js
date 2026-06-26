@@ -83,7 +83,7 @@ module.exports = {
             let char_index = get_char_index();
             ranking_arr.push({
               name: array[i].name,
-              link: "https://puddle.farm/player/" + array[i].id,
+              link: "https://puddle.farm/player/" + array[i].id + "/" + response.data.ratings[char_index].char_short,
               char: response.data.ratings[char_index].character,
               char_short: response.data.ratings[char_index].char_short,
               rating: response.data.ratings[char_index].rating,
