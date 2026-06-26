@@ -54,7 +54,7 @@ module.exports = {
     try {
       await interaction.reply({
         content:
-          "Posting the leaderboard! Please wait a few seconds. If nothing gets sent, contact the bot developer!",
+          "Posting the leaderboard! This usually takes 0.5 seconds per player (or longer, if the server CPU is under heavy load). If nothing gets sent after 5 minutes, contact the bot developer!",
         flags: MessageFlags.Ephemeral,
       });
       let array = [];
