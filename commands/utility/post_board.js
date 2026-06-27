@@ -22,7 +22,9 @@ module.exports = {
     .addIntegerOption((option) =>
       option
         .setName("board_index")
-        .setDescription("The index of the board that you want to edit (maximum of 9)")
+        .setDescription(
+          "The index of the board that you want to edit (maximum of 9)",
+        )
         .setMinValue(1)
         .setMaxValue(9)
         .setRequired(true),
@@ -47,6 +49,14 @@ module.exports = {
       await interaction.reply({
         content:
           "Stop right there, you criminal scum! You can't run that command!",
+        flags: MessageFlags.Ephemeral,
+      });
+      return;
+    }
+    if(!interaction.guild.members.me.permissionsIn(interaction.options.getChannel("channel")).has([ PermissionsBitField.Flags.ViewChannel, PermissionsBitField.Flags.SendMessages ])) {
+      await interaction.reply({
+        content:
+          "The bot doesn't have permissions to send messages in that channel! Make sure that the bot has the `Send Messages` and `View Channel` permissions in said channel or try a different channel.",
         flags: MessageFlags.Ephemeral,
       });
       return;
@@ -83,7 +93,11 @@ module.exports = {
             let char_index = get_char_index();
             ranking_arr.push({
               name: array[i].name,
-              link: "https://puddle.farm/player/" + array[i].id + "/" + response.data.ratings[char_index].char_short,
+              link:
+                "https://puddle.farm/player/" +
+                array[i].id +
+                "/" +
+                response.data.ratings[char_index].char_short,
               char: response.data.ratings[char_index].character,
               char_short: response.data.ratings[char_index].char_short,
               rating: response.data.ratings[char_index].rating,
@@ -130,7 +144,11 @@ module.exports = {
         .setColor(0x0099ff)
         .setTitle(interaction.options.getString("name"))
         .setDescription(ranking_txt)
-        .setFooter({ text: 'Board index: ' + interaction.options.getInteger("board_index").toString()})
+        .setFooter({
+          text:
+            "Board index: " +
+            interaction.options.getInteger("board_index").toString(),
+        })
         .setTimestamp();
 
       const update = new ButtonBuilder()
@@ -144,10 +162,7 @@ module.exports = {
         .send({ embeds: [leaderboardEmbed], components: [buttons] });
       delete require.cache[
         require.resolve(
-          path.join(
-            process.cwd(),
-            "/datasets/" + filename + ".json",
-          ),
+          path.join(process.cwd(), "/datasets/" + filename + ".json"),
         )
       ];
     } catch (_err) {
