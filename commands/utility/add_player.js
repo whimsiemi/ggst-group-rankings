@@ -42,10 +42,10 @@ module.exports = {
       option
         .setName("name")
         .setDescription(
-          "Player's display name (max of 16 characers, will default to in-game name if no input is given)",
+          "Player's display name (max of 32 characers, will default to in-game name if no input is given)",
         )
         .setRequired(false)
-        .setMaxLength(16),
+        .setMaxLength(32),
     ),
   async execute(interaction) {
     if (

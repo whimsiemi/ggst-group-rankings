@@ -39,10 +39,10 @@ module.exports = {
       option
         .setName("name")
         .setDescription(
-          "Change the player's display name (max of 16 characters)",
+          "Change the player's display name (max of 32 characters)",
         )
         .setRequired(false)
-        .setMaxLength(16),
+        .setMaxLength(32),
     )
     .addStringOption((option) =>
       option
