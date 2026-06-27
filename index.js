@@ -89,9 +89,6 @@ client.on(Events.InteractionCreate, async (interaction) => {
       }
     }
 
-    timestamps.set(interaction.user.id, now);
-
-    setTimeout(() => timestamps.delete(interaction.user.id), buttonCooldownAmount);
     if (interaction.customId == "update") {
       if (
         !interaction.member.permissions.has(
@@ -105,6 +102,17 @@ client.on(Events.InteractionCreate, async (interaction) => {
         });
         return;
       }
+      if(!interaction.guild.members.me.permissionsIn(interaction.channel.id).has([ PermissionsBitField.Flags.ViewChannel, PermissionsBitField.Flags.SendMessages ])) {
+      await interaction.reply({
+        content:
+          "The bot doesn't have permissions to send messages in that channel! Make sure that the bot has the `Send Messages` and `View Channel` permissions in said channel or try a different channel.",
+        flags: MessageFlags.Ephemeral,
+      });
+      return;
+    }
+    timestamps.set(interaction.user.id, now);
+
+    setTimeout(() => timestamps.delete(interaction.user.id), buttonCooldownAmount);
       await interaction.reply({
         content:
           "Updating the leaderboard! This usually takes 0.5 seconds per player (or longer, if the server CPU is under heavy load). If nothing gets updated after 5 minutes, contact the bot developer!",
