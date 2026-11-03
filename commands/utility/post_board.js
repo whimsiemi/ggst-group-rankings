@@ -183,15 +183,15 @@ module.exports = {
             ") \n";
         }
       }
-      let footer = "Board index: " + index.toString();
+      let footer = "Board index: " + interaction.options.getInteger("board_index").toString();
         if (array.length > 20) {
           footer =
             "(embeds removed to save text space) Board index: " +
-            index.toString();
+            interaction.options.getInteger("board_index").toString();
         }
       const leaderboardEmbed = new EmbedBuilder()
-        .setColor(interaction.message.embeds[0].color)
-        .setTitle(interaction.message.embeds[0].title)
+        .setColor(0x0099ff)
+        .setTitle(interaction.options.getString("name"))
         .setDescription(ranking_txt)
         .setFooter({
           text: footer,
@@ -213,11 +213,11 @@ module.exports = {
         )
       ];
     } catch (_err) {
+      console.log(_err);
       await interaction.reply({
         content: "Oops! There was an error!",
         flags: MessageFlags.Ephemeral,
       });
-      console.log(_err);
     }
   },
 };
