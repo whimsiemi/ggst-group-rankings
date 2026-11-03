@@ -252,9 +252,8 @@ client.on(Events.InteractionCreate, async (interaction) => {
         let footer = "Board index: " + index.toString();
         if (array.length > 20) {
           footer =
-            "Board index: " +
-            index.toString() +
-            " (embeds removed to save text space)";
+            "(embeds removed to save text space) Board index: " +
+            index.toString();
         }
         const leaderboardEmbed = new EmbedBuilder()
           .setColor(interaction.message.embeds[0].color)

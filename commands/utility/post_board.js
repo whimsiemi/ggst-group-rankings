@@ -184,12 +184,11 @@ module.exports = {
         }
       }
       let footer = "Board index: " + index.toString();
-      if (array.length > 20) {
-        footer =
-          "Board index: " +
-          index.toString() +
-          " (embeds removed to save text space)";
-      }
+        if (array.length > 20) {
+          footer =
+            "(embeds removed to save text space) Board index: " +
+            index.toString();
+        }
       const leaderboardEmbed = new EmbedBuilder()
         .setColor(interaction.message.embeds[0].color)
         .setTitle(interaction.message.embeds[0].title)
