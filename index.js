@@ -103,17 +103,27 @@ client.on(Events.InteractionCreate, async (interaction) => {
         });
         return;
       }
-      if(!interaction.guild.members.me.permissionsIn(interaction.channel.id).has([ PermissionsBitField.Flags.ViewChannel, PermissionsBitField.Flags.SendMessages ])) {
-      await interaction.reply({
-        content:
-          "The bot doesn't have permissions to send messages in that channel! Make sure that the bot has the `Send Messages` and `View Channel` permissions in said channel or try a different channel.",
-        flags: MessageFlags.Ephemeral,
-      });
-      return;
-    }
-    timestamps.set(interaction.user.id, now);
+      if (
+        !interaction.guild.members.me
+          .permissionsIn(interaction.channel.id)
+          .has([
+            PermissionsBitField.Flags.ViewChannel,
+            PermissionsBitField.Flags.SendMessages,
+          ])
+      ) {
+        await interaction.reply({
+          content:
+            "The bot doesn't have permissions to send messages in that channel! Make sure that the bot has the `Send Messages` and `View Channel` permissions in said channel or try a different channel.",
+          flags: MessageFlags.Ephemeral,
+        });
+        return;
+      }
+      timestamps.set(interaction.user.id, now);
 
-    setTimeout(() => timestamps.delete(interaction.user.id), buttonCooldownAmount);
+      setTimeout(
+        () => timestamps.delete(interaction.user.id),
+        buttonCooldownAmount,
+      );
       await interaction.reply({
         content:
           "Updating the leaderboard! This usually takes 0.5 seconds per player (or longer, if the server CPU is under heavy load). If nothing gets updated after 5 minutes, contact the bot developer!",
@@ -157,7 +167,11 @@ client.on(Events.InteractionCreate, async (interaction) => {
               let char_index = get_char_index();
               ranking_arr.push({
                 name: array[i].name,
-                link: "https://puddle.farm/ggst/player/" + array[i].id + "/" + response.data.ratings[char_index].char_short,
+                link:
+                  "https://puddle.farm/ggst/player/" +
+                  array[i].id +
+                  "/" +
+                  response.data.ratings[char_index].char_short,
                 char: response.data.ratings[char_index].character,
                 char_short: response.data.ratings[char_index].char_short,
                 rating: response.data.ratings[char_index].rating,
@@ -182,10 +196,13 @@ client.on(Events.InteractionCreate, async (interaction) => {
               break;
             }
           }
-          var rank = ["RANK_NA", 0, "1567266468268216360"]
+          var rank = ["RANK_NA", 0, "1567266468268216360"];
           for (let k in ranks) {
-            if (ranks[k][1] > ranking_arr[i].rating) {
+            if (ranks[k][1] > ranking_arr[i].rating && k != ranks.length) {
               rank = ranks[k - 1];
+              break;
+            } else {
+              rank = ranks[k];
               break;
             }
           }
