@@ -145,7 +145,7 @@ client.on(Events.InteractionCreate, async (interaction) => {
         let ranking_txt = "";
         for (let i in array) {
           await axios
-            .get("https://puddle.farm/api/player/" + array[i].id)
+            .get("https://puddle.farm/ggst/api/player/" + array[i].id)
             .then((response) => {
               function get_char_index() {
                 for (let j in response.data.ratings) {
@@ -156,7 +156,7 @@ client.on(Events.InteractionCreate, async (interaction) => {
               let char_index = get_char_index();
               ranking_arr.push({
                 name: array[i].name,
-                link: "https://puddle.farm/player/" + array[i].id + "/" + response.data.ratings[char_index].char_short,
+                link: "https://puddle.farm/ggst/player/" + array[i].id + "/" + response.data.ratings[char_index].char_short,
                 char: response.data.ratings[char_index].character,
                 char_short: response.data.ratings[char_index].char_short,
                 rating: response.data.ratings[char_index].rating,

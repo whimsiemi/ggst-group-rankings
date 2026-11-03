@@ -9,7 +9,7 @@ async function fetch_characters() {
     fs.mkdirSync("./datasets");
     fs.mkdirSync("./datasets/chars");
   }
-  let chars_req = await axios.get("https://puddle.farm/api/characters");
+  let chars_req = await axios.get("https://puddle.farm/ggst/api/characters");
   let chars = chars_req.data;
   fs.writeFile(
     "./datasets/chars/chars.json",

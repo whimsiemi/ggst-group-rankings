@@ -82,7 +82,7 @@ module.exports = {
       let ranking_txt = "";
       for (let i in array) {
         await axios
-          .get("https://puddle.farm/api/player/" + array[i].id)
+          .get("https://puddle.farm/ggst/api/player/" + array[i].id)
           .then((response) => {
             function get_char_index() {
               for (let j in response.data.ratings) {
@@ -94,7 +94,7 @@ module.exports = {
             ranking_arr.push({
               name: array[i].name,
               link:
-                "https://puddle.farm/player/" +
+                "https://puddle.farm/ggst/player/" +
                 array[i].id +
                 "/" +
                 response.data.ratings[char_index].char_short,
