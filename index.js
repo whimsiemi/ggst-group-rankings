@@ -161,7 +161,6 @@ client.on(Events.InteractionCreate, async (interaction) => {
                 char: response.data.ratings[char_index].character,
                 char_short: response.data.ratings[char_index].char_short,
                 rating: response.data.ratings[char_index].rating,
-                rank: 
               });
             });
         }
