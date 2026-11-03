@@ -4,6 +4,7 @@ const fs = require("node:fs");
 const path = require("node:path");
 const axios = require("axios");
 const emojis = require(path.join(process.cwd(), "/emojis.json"));
+const ranks = require(path.join(process.cwd(), "/ranks.json"));
 
 const {
   Client,
@@ -160,6 +161,7 @@ client.on(Events.InteractionCreate, async (interaction) => {
                 char: response.data.ratings[char_index].character,
                 char_short: response.data.ratings[char_index].char_short,
                 rating: response.data.ratings[char_index].rating,
+                rank: 
               });
             });
         }
@@ -181,6 +183,10 @@ client.on(Events.InteractionCreate, async (interaction) => {
               break;
             }
           }
+          var rank = ["RANK_NA", 0, "1567266468268216360"]
+          for (let k in ranks) {
+            if (ranks[k][1] > ranking_arr[i].rating) rank = ranks[k - 1];
+          }
           ranking_txt +=
             i +
             1 +
@@ -195,9 +201,13 @@ client.on(Events.InteractionCreate, async (interaction) => {
             ranking_arr[i].link +
             ") (" +
             ranking_arr[i].char +
-            ", " +
+            ", <:" +
+            rank[0] +
+            ":" +
+            rank[2] +
+            "> " +
             ranking +
-            ")\n";
+            ") \n";
         }
         const leaderboardEmbed = new EmbedBuilder()
           .setColor(interaction.message.embeds[0].color)

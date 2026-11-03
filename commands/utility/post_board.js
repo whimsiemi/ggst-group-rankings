@@ -12,6 +12,7 @@ const {
 const path = require("path");
 const axios = require("axios");
 const emojis = require(path.join(process.cwd(), "/emojis.json"));
+const ranks = require(path.join(process.cwd(), "/ranks.json"));
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -53,7 +54,14 @@ module.exports = {
       });
       return;
     }
-    if(!interaction.guild.members.me.permissionsIn(interaction.options.getChannel("channel")).has([ PermissionsBitField.Flags.ViewChannel, PermissionsBitField.Flags.SendMessages ])) {
+    if (
+      !interaction.guild.members.me
+        .permissionsIn(interaction.options.getChannel("channel"))
+        .has([
+          PermissionsBitField.Flags.ViewChannel,
+          PermissionsBitField.Flags.SendMessages,
+        ])
+    ) {
       await interaction.reply({
         content:
           "The bot doesn't have permissions to send messages in that channel! Make sure that the bot has the `Send Messages` and `View Channel` permissions in said channel or try a different channel.",
@@ -122,6 +130,10 @@ module.exports = {
             break;
           }
         }
+        var rank = ["RANK_NA", 0, "1567266468268216360"];
+        for (let k in ranks) {
+          if (ranks[k][1] > ranking_arr[i].rating) rank = ranks[k - 1];
+        }
         ranking_txt +=
           i +
           1 +
@@ -136,9 +148,13 @@ module.exports = {
           ranking_arr[i].link +
           ") (" +
           ranking_arr[i].char +
-          ", " +
+          ", <:" +
+          rank[0] +
+          ":" +
+          rank[2] +
+          "> " +
           ranking +
-          ")\n";
+          ") \n";
       }
       const leaderboardEmbed = new EmbedBuilder()
         .setColor(0x0099ff)
