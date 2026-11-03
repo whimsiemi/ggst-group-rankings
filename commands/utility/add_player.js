@@ -1,6 +1,10 @@
 // /add_player ("Adds a player to the server leaderboard")
 
-const { SlashCommandBuilder, MessageFlags, PermissionsBitField } = require("discord.js");
+const {
+  SlashCommandBuilder,
+  MessageFlags,
+  PermissionsBitField,
+} = require("discord.js");
 const path = require("path");
 const chars = require(path.join(process.cwd(), "/datasets/chars/chars.json"));
 const fetch = require(path.join(process.cwd(), "/fetch_player.js"));
@@ -18,7 +22,6 @@ module.exports = {
         .setMinValue(1)
         .setMaxValue(9)
         .setRequired(true),
-
     )
     .addStringOption((option) =>
       option
@@ -76,17 +79,26 @@ module.exports = {
         });
         return;
       }
-      await fetch(
-        interaction.options.getInteger("board_index"),
-        interaction.options.getString("name"),
-        interaction.options.getString("id"),
-        interaction.options.getString("character").toUpperCase(),
-        interaction.guild.id,
-      );
-      await interaction.reply({
-        content: "Added the chosen player to the leaderboard!",
-        flags: MessageFlags.Ephemeral,
-      });
+      if (
+        (await fetch(
+          interaction.options.getInteger("board_index"),
+          interaction.options.getString("name"),
+          interaction.options.getString("id"),
+          interaction.options.getString("character").toUpperCase(),
+          interaction.guild.id,
+        )) == []
+      ) {
+        await interaction.reply({
+          content:
+            "You can not add more than 50 players to a leaderboard! This is due to Discord's message size limits. Sorry!",
+          flags: MessageFlags.Ephemeral,
+        });
+      } else {
+        await interaction.reply({
+          content: "Added the chosen player to the leaderboard!",
+          flags: MessageFlags.Ephemeral,
+        });
+      }
     } catch (_err) {
       await interaction.reply({
         content: "Oops! There was an error!",
