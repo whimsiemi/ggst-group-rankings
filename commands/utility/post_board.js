@@ -75,143 +75,159 @@ module.exports = {
           "Posting the leaderboard! This usually takes 0.5 seconds per player (or longer, if the server CPU is under heavy load). If nothing gets sent after 5 minutes, contact the bot developer!",
         flags: MessageFlags.Ephemeral,
       });
-      let array = [];
-      let filename = interaction.guild.id;
-      if (interaction.options.getInteger("board_index") > 1) {
-        filename =
-          interaction.guild.id +
-          "_" +
-          interaction.options.getInteger("board_index").toString();
-      }
-      array = require(
-        path.join(process.cwd(), "/datasets/" + filename + ".json"),
-      );
-      let ranking_arr = [];
-      let ranking_txt = "";
-      for (let i in array) {
-        await axios
-          .get("https://puddle.farm/ggst/api/player/" + array[i].id)
-          .then((response) => {
-            function get_char_index() {
-              for (let j in response.data.ratings) {
-                if (response.data.ratings[j].char_short == array[i].main)
-                  return j;
+        let array = [];
+        let filename = interaction.guild.id;
+        let index = 1;
+        if (interaction.message.embeds[0].footer != null) {
+          if (
+            interaction.message.embeds[0].footer.text.substr(
+              interaction.message.embeds[0].footer.text.length - 1,
+            ) != "1"
+          ) {
+            filename =
+              interaction.guild.id +
+              "_" +
+              interaction.message.embeds[0].footer.text.substr(
+                interaction.message.embeds[0].footer.text.length - 1,
+              );
+            index = interaction.message.embeds[0].footer.text.substr(
+              interaction.message.embeds[0].footer.text.length - 1,
+            );
+          }
+        }
+        array = require(
+          path.join(process.cwd(), "/datasets/" + filename + ".json"),
+        );
+        let ranking_arr = [];
+        let ranking_txt = "";
+        for (let i in array) {
+          await axios
+            .get("https://puddle.farm/ggst/api/player/" + array[i].id)
+            .then((response) => {
+              function get_char_index() {
+                for (let j in response.data.ratings) {
+                  if (response.data.ratings[j].char_short == array[i].main)
+                    return j;
+                }
               }
-            }
-            let char_index = get_char_index();
-            ranking_arr.push({
-              name: array[i].name,
-              link:
-                "https://puddle.farm/ggst/player/" +
-                array[i].id +
-                "/" +
-                response.data.ratings[char_index].char_short,
-              char: response.data.ratings[char_index].character,
-              char_short: response.data.ratings[char_index].char_short,
-              rating: response.data.ratings[char_index].rating,
+              let char_index = get_char_index();
+              ranking_arr.push({
+                name: array[i].name,
+                link:
+                  "https://puddle.farm/ggst/player/" +
+                  array[i].id +
+                  "/" +
+                  response.data.ratings[char_index].char_short,
+                char: response.data.ratings[char_index].character,
+                char_short: response.data.ratings[char_index].char_short,
+                rating: response.data.ratings[char_index].rating,
+              });
             });
-          });
-      }
-      ranking_arr.sort((a, b) => b.rating - a.rating);
-      for (let i in ranking_arr) {
-        let ranking = "";
-        if (
-          ranking_arr[i].rating.toString().startsWith("1000") &&
-          ranking_arr[i].rating.toString().length > 5
-        ) {
-          ranking = ranking_arr[i].rating.toString().slice(4) + " DR";
-        } else {
-          ranking = ranking_arr[i].rating + " RP";
         }
-        var emoji = "1519802004787036170";
-        for (let j in emojis) {
-          if (emojis[j][0] == ranking_arr[i].char_short) {
-            emoji = emojis[j][1];
-            break;
+        ranking_arr.sort((a, b) => b.rating - a.rating);
+        for (let i in ranking_arr) {
+          let ranking = "";
+          if (
+            ranking_arr[i].rating.toString().startsWith("1000") &&
+            ranking_arr[i].rating.toString().length > 5
+          ) {
+            ranking = ranking_arr[i].rating.toString().slice(4) + " DR";
+          } else {
+            ranking = ranking_arr[i].rating + " RP";
+          }
+          var emoji = "1519808417013698682";
+          for (let j in emojis) {
+            if (emojis[j][0] == ranking_arr[i].char_short) {
+              emoji = emojis[j][1];
+              break;
+            }
+          }
+          var rank = ["RANK_NA", 0, "1567266468268216360"];
+          for (let k in ranks) {
+            if (ranks[k][1] > ranking_arr[i].rating) {
+              rank = ranks[k - 1];
+              break;
+            } else if (k == ranks.length - 1) {
+              rank = ranks[k];
+              break;
+            }
+          }
+          if (array.length > 20) {
+            ranking_txt +=
+              i +
+              1 +
+              ". <:GG_" +
+              ranking_arr[i].char_short +
+              ":" +
+              emoji +
+              "> " +
+              ranking_arr[i].name +
+              " (" +
+              ranking_arr[i].char +
+              ", <:" +
+              rank[0] +
+              ":" +
+              rank[2] +
+              "> " +
+              ranking +
+              ") \n";
+          } else {
+            ranking_txt +=
+              i +
+              1 +
+              ". <:GG_" +
+              ranking_arr[i].char_short +
+              ":" +
+              emoji +
+              "> " +
+              "[" +
+              ranking_arr[i].name +
+              "](" +
+              ranking_arr[i].link +
+              ") (" +
+              ranking_arr[i].char +
+              ", <:" +
+              rank[0] +
+              ":" +
+              rank[2] +
+              "> " +
+              ranking +
+              ") \n";
           }
         }
-        var rank = ["RANK_NA", 0, "1567266468268216360"];
-        for (let k in ranks) {
-          if (ranks[k][1] > ranking_arr[i].rating) {
-            rank = ranks[k - 1];
-            break;
-          } else if (k == ranks.length - 1) {
-            rank = ranks[k];
-            break;
-          }
-        }
-        if (array.length > 20) {
-          ranking_txt +=
-            i +
-            1 +
-            ". <:GG_" +
-            ranking_arr[i].char_short +
-            ":" +
-            emoji +
-            "> " +
-            ranking_arr[i].name +
-            " (" +
-            ranking_arr[i].char +
-            ", <:" +
-            rank[0] +
-            ":" +
-            rank[2] +
-            "> " +
-            ranking +
-            ") \n";
-        } else {
-          ranking_txt +=
-            i +
-            1 +
-            ". <:GG_" +
-            ranking_arr[i].char_short +
-            ":" +
-            emoji +
-            "> " +
-            "[" +
-            ranking_arr[i].name +
-            "](" +
-            ranking_arr[i].link +
-            ") (" +
-            ranking_arr[i].char +
-            ", <:" +
-            rank[0] +
-            ":" +
-            rank[2] +
-            "> " +
-            ranking +
-            ") \n";
-        }
-      }
-      let footer = "Board index: " + index.toString();
+        let footer = "Board index: " + index.toString();
         if (array.length > 20) {
           footer =
             "(embeds removed to save text space) Board index: " +
             index.toString();
         }
-      const leaderboardEmbed = new EmbedBuilder()
-        .setColor(interaction.message.embeds[0].color)
-        .setTitle(interaction.message.embeds[0].title)
-        .setDescription(ranking_txt)
-        .setFooter({
-          text: footer,
-        })
-        .setTimestamp();
+        const leaderboardEmbed = new EmbedBuilder()
+          .setColor(interaction.message.embeds[0].color)
+          .setTitle(interaction.message.embeds[0].title)
+          .setDescription(ranking_txt)
+          .setFooter({
+            text: footer,
+          })
+          .setTimestamp();
 
-      const update = new ButtonBuilder()
-        .setCustomId("update")
-        .setLabel("Refresh")
-        .setStyle(ButtonStyle.Primary);
-      const buttons = new ActionRowBuilder().addComponents(update);
+        const update = new ButtonBuilder()
+          .setCustomId("update")
+          .setLabel("Refresh")
+          .setStyle(ButtonStyle.Primary);
+        const buttons = new ActionRowBuilder().addComponents(update);
 
-      interaction.options
-        .getChannel("channel")
-        .send({ embeds: [leaderboardEmbed], components: [buttons] });
-      delete require.cache[
-        require.resolve(
-          path.join(process.cwd(), "/datasets/" + filename + ".json"),
-        )
-      ];
+        interaction.message.edit({
+          embeds: [leaderboardEmbed],
+          components: [buttons],
+        });
+        delete require.cache[
+          require.resolve(
+            path.join(
+              process.cwd(),
+              "/datasets/" + interaction.guild.id + ".json",
+            ),
+          )
+        ];
     } catch (_err) {
       await interaction.reply({
         content: "Oops! There was an error!",
