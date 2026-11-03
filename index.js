@@ -201,7 +201,7 @@ client.on(Events.InteractionCreate, async (interaction) => {
             if (ranks[k][1] > ranking_arr[i].rating) {
               rank = ranks[k - 1];
               break;
-            } else if (k == ranks.length) {
+            } else if (k == ranks.length - 1) {
               rank = ranks[k];
               break;
             }
