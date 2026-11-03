@@ -132,7 +132,13 @@ module.exports = {
         }
         var rank = ["RANK_NA", 0, "1567266468268216360"];
         for (let k in ranks) {
-          if (ranks[k][1] > ranking_arr[i].rating) rank = ranks[k - 1];
+          if (ranks[k][1] > ranking_arr[i].rating) {
+            rank = ranks[k - 1];
+            break;
+          } else if (k == ranks.length - 1) {
+            rank = ranks[k];
+            break;
+          }
         }
         ranking_txt +=
           i +
