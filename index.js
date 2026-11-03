@@ -198,10 +198,10 @@ client.on(Events.InteractionCreate, async (interaction) => {
           }
           var rank = ["RANK_NA", 0, "1567266468268216360"];
           for (let k in ranks) {
-            if (ranks[k][1] > ranking_arr[i].rating && k != ranks.length) {
+            if (ranks[k][1] > ranking_arr[i].rating) {
               rank = ranks[k - 1];
               break;
-            } else {
+            } else if (k == ranks.length) {
               rank = ranks[k];
               break;
             }
