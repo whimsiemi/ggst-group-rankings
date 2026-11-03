@@ -140,36 +140,62 @@ module.exports = {
             break;
           }
         }
-        ranking_txt +=
-          i +
-          1 +
-          ". <:GG_" +
-          ranking_arr[i].char_short +
-          ":" +
-          emoji +
-          "> " +
-          "[" +
-          ranking_arr[i].name +
-          "](" +
-          ranking_arr[i].link +
-          ") (" +
-          ranking_arr[i].char +
-          ", <:" +
-          rank[0] +
-          ":" +
-          rank[2] +
-          "> " +
-          ranking +
-          ") \n";
+        if (array.length > 20) {
+          ranking_txt +=
+            i +
+            1 +
+            ". <:GG_" +
+            ranking_arr[i].char_short +
+            ":" +
+            emoji +
+            "> " +
+            ranking_arr[i].name +
+            " (" +
+            ranking_arr[i].char +
+            ", <:" +
+            rank[0] +
+            ":" +
+            rank[2] +
+            "> " +
+            ranking +
+            ") \n";
+        } else {
+          ranking_txt +=
+            i +
+            1 +
+            ". <:GG_" +
+            ranking_arr[i].char_short +
+            ":" +
+            emoji +
+            "> " +
+            "[" +
+            ranking_arr[i].name +
+            "](" +
+            ranking_arr[i].link +
+            ") (" +
+            ranking_arr[i].char +
+            ", <:" +
+            rank[0] +
+            ":" +
+            rank[2] +
+            "> " +
+            ranking +
+            ") \n";
+        }
+      }
+      let footer = "Board index: " + index.toString();
+      if (array.length > 20) {
+        footer =
+          "Board index: " +
+          index.toString() +
+          " (embeds removed to save text space)";
       }
       const leaderboardEmbed = new EmbedBuilder()
-        .setColor(0x0099ff)
-        .setTitle(interaction.options.getString("name"))
+        .setColor(interaction.message.embeds[0].color)
+        .setTitle(interaction.message.embeds[0].title)
         .setDescription(ranking_txt)
         .setFooter({
-          text:
-            "Board index: " +
-            interaction.options.getInteger("board_index").toString(),
+          text: footer,
         })
         .setTimestamp();
 

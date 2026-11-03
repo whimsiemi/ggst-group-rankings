@@ -206,34 +206,62 @@ client.on(Events.InteractionCreate, async (interaction) => {
               break;
             }
           }
-          ranking_txt +=
-            i +
-            1 +
-            ". <:GG_" +
-            ranking_arr[i].char_short +
-            ":" +
-            emoji +
-            "> " +
-            "[" +
-            ranking_arr[i].name +
-            "](" +
-            ranking_arr[i].link +
-            ") (" +
-            ranking_arr[i].char +
-            ", <:" +
-            rank[0] +
-            ":" +
-            rank[2] +
-            "> " +
-            ranking +
-            ") \n";
+          if (array.length > 20) {
+            ranking_txt +=
+              i +
+              1 +
+              ". <:GG_" +
+              ranking_arr[i].char_short +
+              ":" +
+              emoji +
+              "> " +
+              ranking_arr[i].name +
+              " (" +
+              ranking_arr[i].char +
+              ", <:" +
+              rank[0] +
+              ":" +
+              rank[2] +
+              "> " +
+              ranking +
+              ") \n";
+          } else {
+            ranking_txt +=
+              i +
+              1 +
+              ". <:GG_" +
+              ranking_arr[i].char_short +
+              ":" +
+              emoji +
+              "> " +
+              "[" +
+              ranking_arr[i].name +
+              "](" +
+              ranking_arr[i].link +
+              ") (" +
+              ranking_arr[i].char +
+              ", <:" +
+              rank[0] +
+              ":" +
+              rank[2] +
+              "> " +
+              ranking +
+              ") \n";
+          }
+        }
+        let footer = "Board index: " + index.toString();
+        if (array.length > 20) {
+          footer =
+            "Board index: " +
+            index.toString() +
+            " (embeds removed to save text space)";
         }
         const leaderboardEmbed = new EmbedBuilder()
           .setColor(interaction.message.embeds[0].color)
           .setTitle(interaction.message.embeds[0].title)
           .setDescription(ranking_txt)
           .setFooter({
-            text: "Board index: " + index.toString(),
+            text: footer,
           })
           .setTimestamp();
 
@@ -257,6 +285,7 @@ client.on(Events.InteractionCreate, async (interaction) => {
         ];
       } catch (err) {
         console.log("Error! Probably because the board was deleted lmfao");
+        console.log(err);
       }
     }
   } else if (interaction.isChatInputCommand()) {
