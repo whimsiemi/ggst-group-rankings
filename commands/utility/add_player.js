@@ -12,7 +12,7 @@ const fetch = require(path.join(process.cwd(), "/fetch_player.js"));
 module.exports = {
   data: new SlashCommandBuilder()
     .setName("add_player")
-    .setDescription("Adds a player to the server leaderboard")
+    .setDescription("Adds a player to the server leaderboard (max per board is 30)")
     .addIntegerOption((option) =>
       option
         .setName("board_index")
