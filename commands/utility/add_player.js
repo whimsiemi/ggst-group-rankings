@@ -90,7 +90,7 @@ module.exports = {
       ) {
         await interaction.reply({
           content:
-            "You can not add more than 50 players to a leaderboard! This is due to Discord's message size limits. Sorry!",
+            "You can not add more than 30 players to a leaderboard! This is due to Discord's message size limits. Sorry!",
           flags: MessageFlags.Ephemeral,
         });
       } else {

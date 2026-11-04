@@ -17,7 +17,7 @@ function fetch_player(index, display_name, id, char, server_id, entry) {
     console.log("Can't find json! Making new json...");
     array = [];
   }
-  if (array.length > 50) {
+  if (array.length > 30) {
     return [];
   }
   axios.get("https://puddle.farm/ggst/api/player/" + id).then((response) => {
