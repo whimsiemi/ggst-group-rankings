@@ -206,48 +206,24 @@ client.on(Events.InteractionCreate, async (interaction) => {
               break;
             }
           }
-          if (array.length > 20) {
+          let char_emoji = client.emojis.cache.get(emoji);
+          let rank_emoji = client.emojis.cache.get(rank[2]);
             ranking_txt +=
               i +
               1 +
-              ". <:GG_" +
-              ranking_arr[i].char_short +
-              ":" +
-              emoji +
-              "> " +
-              ranking_arr[i].name +
-              " (" +
-              ranking_arr[i].char +
-              ", <:" +
-              rank[0] +
-              ":" +
-              rank[2] +
-              "> " +
-              ranking +
-              ") \n";
-          } else {
-            ranking_txt +=
-              i +
-              1 +
-              ". <:GG_" +
-              ranking_arr[i].char_short +
-              ":" +
-              emoji +
-              "> " +
+              ". " +
+              `${char_emoji}` + 
               "[" +
               ranking_arr[i].name +
               "](" +
               ranking_arr[i].link +
               ") (" +
               ranking_arr[i].char +
-              ", <:" +
-              rank[0] +
-              ":" +
-              rank[2] +
-              "> " +
+              "," +
+              `${rank_emoji}` +
+              " " + 
               ranking +
               ") \n";
-          }
         }
         let footer = "Board index: " + index.toString();
         if (array.length > 20) {
