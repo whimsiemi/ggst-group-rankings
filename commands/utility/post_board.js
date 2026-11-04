@@ -186,7 +186,7 @@ module.exports = {
       let footer = "Board index: " + interaction.options.getInteger("board_index").toString();
         if (array.length > 20) {
           footer =
-            "(embeds removed to save text space) Board index: " +
+            "(embeds are removed past 20 entries) • Board index: " +
             interaction.options.getInteger("board_index").toString();
         }
       const leaderboardEmbed = new EmbedBuilder()

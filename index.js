@@ -252,7 +252,7 @@ client.on(Events.InteractionCreate, async (interaction) => {
         let footer = "Board index: " + index.toString();
         if (array.length > 20) {
           footer =
-            "(embeds removed to save text space) Board index: " +
+            "(embeds are removed past 20 entries) • Board index: " +
             index.toString();
         }
         const leaderboardEmbed = new EmbedBuilder()
