@@ -93,7 +93,7 @@ module.exports = {
       for (let i in array) {
         if (array[i].id == interaction.options.getString("id")) {
           if (interaction.options.getString("entry") != "" && interaction.options.getString("entry") != null) {
-            if (array[i].main == interaction.options.getString("entry"))
+            if (array[i].main == interaction.options.getString("entry").toUpperCase())
             {
               array.splice(i, 1);
               break;
