@@ -206,24 +206,48 @@ client.on(Events.InteractionCreate, async (interaction) => {
               break;
             }
           }
-          let char_emoji = client.emojis.cache.get(emoji);
-          let rank_emoji = client.emojis.cache.find(emoji => emoji.name === rank[0]);
+          if (array.length > 20) {
             ranking_txt +=
               i +
               1 +
-              ". " +
-              `${char_emoji}` + 
+              ". <:GG_" +
+              ranking_arr[i].char_short +
+              ":" +
+              emoji +
+              "> " +
+              ranking_arr[i].name +
+              " (" +
+              ranking_arr[i].char +
+              ", <:" +
+              rank[0] +
+              ":" +
+              rank[2] +
+              "> " +
+              ranking +
+              ") \n";
+          } else {
+            ranking_txt +=
+              i +
+              1 +
+              ". <:GG_" +
+              ranking_arr[i].char_short +
+              ":" +
+              emoji +
+              "> " +
               "[" +
               ranking_arr[i].name +
               "](" +
               ranking_arr[i].link +
               ") (" +
               ranking_arr[i].char +
-              "," +
-              `${rank_emoji}` +
-              " " + 
+              ", <:" +
+              rank[0] +
+              ":" +
+              rank[2] +
+              "> " +
               ranking +
               ") \n";
+          }
         }
         let footer = "Board index: " + index.toString();
         if (array.length > 20) {
@@ -231,7 +255,6 @@ client.on(Events.InteractionCreate, async (interaction) => {
             "(embeds are removed past 20 entries) • Board index: " +
             index.toString();
         }
-        console.log(ranking_txt);
         const leaderboardEmbed = new EmbedBuilder()
           .setColor(interaction.message.embeds[0].color)
           .setTitle(interaction.message.embeds[0].title)
