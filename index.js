@@ -207,7 +207,7 @@ client.on(Events.InteractionCreate, async (interaction) => {
             }
           }
           let char_emoji = client.emojis.cache.get(emoji);
-          let rank_emoji = client.emojis.cache.get(rank[2]);
+          let rank_emoji = client.emojis.cache.find(emoji => emoji.name === rank[0]);
             ranking_txt +=
               i +
               1 +
@@ -231,6 +231,7 @@ client.on(Events.InteractionCreate, async (interaction) => {
             "(embeds are removed past 20 entries) • Board index: " +
             index.toString();
         }
+        console.log(ranking_txt);
         const leaderboardEmbed = new EmbedBuilder()
           .setColor(interaction.message.embeds[0].color)
           .setTitle(interaction.message.embeds[0].title)
